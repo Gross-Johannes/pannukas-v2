@@ -1,8 +1,7 @@
 package net.teymm.pannukas.dish;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import net.teymm.pannukas.category.Category;
 import net.teymm.pannukas.common.entity.BaseEntity;
 
 import java.math.BigDecimal;
@@ -19,13 +18,18 @@ public class Dish extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     public Dish() {
     }
 
-    public Dish(String name, String description, BigDecimal price) {
+    public Dish(String name, String description, BigDecimal price, Category category) {
         this.name = name;
         this.description = description;
         this.price = price;
+        this.category = category;
     }
 
     public String getName() {
@@ -50,5 +54,13 @@ public class Dish extends BaseEntity {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

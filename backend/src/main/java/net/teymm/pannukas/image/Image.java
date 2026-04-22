@@ -2,6 +2,8 @@ package net.teymm.pannukas.image;
 
 import jakarta.persistence.*;
 import net.teymm.pannukas.common.entity.BaseEntity;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "images")
@@ -11,7 +13,8 @@ public class Image extends BaseEntity {
     private String altText;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "image_type_enum")
     private ImageType imageType;
 
     @Column(nullable = false)
