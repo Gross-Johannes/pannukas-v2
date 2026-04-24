@@ -1,5 +1,6 @@
 package net.teymm.pannukas.category;
 
+import net.teymm.pannukas.category.dto.CreateCategory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,5 +19,14 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
+    }
+
+    public Category createCategory(CreateCategory request) {
+        Category category = new Category();
+
+        category.setTitle(request.title());
+        category.setCategoryType(request.categoryType());
+
+        return categoryRepository.save(category);
     }
 }
