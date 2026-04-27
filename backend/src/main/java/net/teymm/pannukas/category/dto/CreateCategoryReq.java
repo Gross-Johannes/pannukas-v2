@@ -8,7 +8,7 @@ import net.teymm.pannukas.config.AppConstants;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
-public record CreateCategory(
+public record CreateCategoryReq(
         @NotBlank
         @Length(
                 min = AppConstants.MIN_CATEGORY_TITLE_LENGTH,

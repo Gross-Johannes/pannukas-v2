@@ -2,7 +2,7 @@ package net.teymm.pannukas.category;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import net.teymm.pannukas.category.dto.CreateCategory;
+import net.teymm.pannukas.category.dto.CreateCategoryReq;
 import net.teymm.pannukas.common.response.ApiResponse;
 import net.teymm.pannukas.common.response.ResponseFactory;
 import org.springframework.http.HttpStatus;
@@ -41,7 +41,7 @@ public class CategoryController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<Category>> createCategory(
-            @ModelAttribute @Valid CreateCategory createCategory,
+            @ModelAttribute @Valid CreateCategoryReq createCategory,
             HttpServletRequest httpRequest
     ) {
         Category data = categoryService.createCategory(createCategory);
