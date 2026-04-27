@@ -3,6 +3,7 @@ package net.teymm.pannukas.category.dto;
 import jakarta.validation.constraints.NotBlank;
 import net.teymm.pannukas.category.CategoryType;
 import net.teymm.pannukas.category.validation.UniqueTitle;
+import net.teymm.pannukas.common.validation.ValidImage;
 import net.teymm.pannukas.common.validation.EnumValue;
 import net.teymm.pannukas.config.AppConstants;
 import org.hibernate.validator.constraints.Length;
@@ -21,6 +22,7 @@ public record CreateCategoryReq(
         @EnumValue(enumClass = CategoryType.class)
         String categoryType,
 
+        @ValidImage
         MultipartFile coverImage
 ) {
 }
