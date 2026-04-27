@@ -25,7 +25,7 @@ public class CategoryService {
         Category category = new Category();
 
         category.setTitle(request.title());
-        category.setCategoryType(request.categoryType());
+        category.setCategoryType(CategoryType.valueOf(request.categoryType()));
 
         return categoryRepository.save(category);
     }
