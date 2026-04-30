@@ -12,4 +12,6 @@ public final class AppConstants {
             "image/png",
             "image/webp"
     };
+
+    public static final String S3_BUCKET_APP_NAMESPACE = "pannukas-v2";
 }
