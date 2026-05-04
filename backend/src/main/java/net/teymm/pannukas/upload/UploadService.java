@@ -2,11 +2,11 @@ package net.teymm.pannukas.upload;
 
 import net.teymm.pannukas.common.exception.ApiException;
 import net.teymm.pannukas.config.AppConfig;
+import net.teymm.pannukas.image.FileData;
 import net.teymm.pannukas.upload.enums.FolderType;
 import net.teymm.pannukas.upload.enums.StorageSection;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -23,52 +23,22 @@ public class UploadService {
     }
 
     public void uploadFile(
-            MultipartFile file,
+            FileData file,
             StorageSection storageSection,
-            FolderType folder,
-            String fileName
+            FolderType folder
     ) {
         try {
             s3Client.putObject(PutObjectRequest.builder()
                     .bucket(appConfig.getS3Properties().bucketName())
-                    .key(buildObjectKey(storageSection, folder, file, fileName))
-                    .build(), RequestBody.fromBytes(file.getBytes()));
+                    .key(buildObjectKey(storageSection, folder, file.name()))
+                    .build(), RequestBody.fromBytes(file.bytes()));
         } catch (Exception ex) {
             throw new ApiException(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private String buildObjectKey(
-            StorageSection storageSection,
-            FolderType folder,
-            MultipartFile file,
-            String fileName
+    private String buildObjectKey(StorageSection storageSection, FolderType folder, String fileName
     ) {
-        String originalFilename = file.getOriginalFilename();
-        String fileNameWithExtension = hasExtension(originalFilename)
-                ? fileName + "." + getExtension(originalFilename)
-                : fileName;
-
-        return KeyConstructor.build(storageSection, folder, fileNameWithExtension);
-    }
-
-    private boolean hasExtension(String originalFilename) {
-        if (originalFilename == null || originalFilename.isBlank()) {
-            return false;
-        }
-
-        int lastDotIndex = originalFilename.lastIndexOf('.');
-
-        return lastDotIndex > 0 && lastDotIndex < originalFilename.length() - 1;
-    }
-
-    private String getExtension(String originalFilename) {
-        if (!hasExtension(originalFilename)) {
-            return "";
-        }
-
-        int lastDotIndex = originalFilename.lastIndexOf('.');
-
-        return originalFilename.substring(lastDotIndex + 1).toLowerCase();
+        return KeyConstructor.build(storageSection, folder, fileName);
     }
 }
