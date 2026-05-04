@@ -1,9 +1,9 @@
 package net.teymm.pannukas.upload;
 
 import net.teymm.pannukas.common.exception.ApiException;
+import net.teymm.pannukas.config.AppConfig;
 import net.teymm.pannukas.upload.enums.FolderType;
 import net.teymm.pannukas.upload.enums.StorageSection;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,12 +14,11 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Service
 public class UploadService {
 
+    private final AppConfig appConfig;
     private final S3Client s3Client;
 
-    @Value("${aws.bucketName}")
-    private String bucketName;
-
-    public UploadService(S3Client s3Client) {
+    public UploadService(AppConfig appConfig, S3Client s3Client) {
+        this.appConfig = appConfig;
         this.s3Client = s3Client;
     }
 
@@ -31,7 +30,7 @@ public class UploadService {
     ) {
         try {
             s3Client.putObject(PutObjectRequest.builder()
-                    .bucket(bucketName)
+                    .bucket(appConfig.getS3Properties().bucketName())
                     .key(buildObjectKey(storageSection, folder, file, fileName))
                     .build(), RequestBody.fromBytes(file.getBytes()));
         } catch (Exception ex) {

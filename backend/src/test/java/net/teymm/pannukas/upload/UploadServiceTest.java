@@ -1,6 +1,8 @@
 package net.teymm.pannukas.upload;
 
 import net.teymm.pannukas.common.exception.ApiException;
+import net.teymm.pannukas.config.AppConfig;
+import net.teymm.pannukas.config.properties.AppS3Properties;
 import net.teymm.pannukas.upload.enums.ImageFolder;
 import net.teymm.pannukas.upload.enums.StorageSection;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -31,12 +32,20 @@ class UploadServiceTest {
     @Mock
     private S3Client s3Client;
 
+    @Mock
+    private AppConfig appConfig;
+
     @InjectMocks
     private UploadService uploadService;
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(uploadService, "bucketName", "test-bucket");
+        when(appConfig.getS3Properties()).thenReturn(new AppS3Properties(
+                "access",
+                "secret",
+                "region",
+                "test-bucket"
+        ));
     }
 
     @Test
